@@ -94,8 +94,11 @@ OSEK OSEK {
       ACTION = ACTIVATETASK {
           TASK = ModbusSlave;
       };
-      ALARMTIME = 2;
-      CYCLETIME = 5;
+      AUTOSTART = TRUE {
+         APPMODE = AppMode1;
+         ALARMTIME = 2;
+         CYCLETIME = 5;
+      };
    };
 
    COUNTER HardwareCounter {
