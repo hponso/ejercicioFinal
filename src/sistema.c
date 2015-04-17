@@ -77,7 +77,7 @@
 /*==================[macros and definitions]=================================*/
 
 /*==================[internal data declaration]==============================*/
-static uint8_t periodo;
+static uint16_t periodo;
 static uint8_t ledsOn;
 
 /*==================[internal functions declaration]=========================*/
@@ -89,7 +89,7 @@ static uint8_t ledsOn;
 /*==================[internal functions definition]==========================*/
 
 /*==================[external functions definition]==========================*/
-extern void sistema_init(uint8_t var1, uint8_t var2)
+extern void sistema_init(uint8_t var1, uint16_t var2)
 {
    ledsOn = var1;
 
@@ -126,7 +126,7 @@ extern void sistema_set(uint8_t teclas)
    {
       periodo += 10;
 
-      if (periodo > 2000)
+      if (periodo >= 2000)
       {
          periodo = 2000;
       }
@@ -136,7 +136,7 @@ extern void sistema_set(uint8_t teclas)
    {
       periodo -= 10;
 
-      if (periodo < 20)
+      if (periodo <= 20)
       {
          periodo = 20;
       }
@@ -148,7 +148,7 @@ extern uint8_t sistema_get_led(void)
    return ledsOn;
 }
 
-extern uint8_t sistema_get_per(void)
+extern uint16_t sistema_get_per(void)
 {
    return periodo;
 }

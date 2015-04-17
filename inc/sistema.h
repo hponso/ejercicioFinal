@@ -38,13 +38,13 @@ extern "C" {
 
 /*==================[external functions declaration]=========================*/
 
-extern void sistema_init(uint8_t,uint8_t);
+extern void sistema_init(uint8_t,uint16_t);
 
 extern void sistema_set(uint8_t);
 
 extern uint8_t sistema_get_led(void);
 
-extern uint8_t sistema_get_per(void);
+extern uint16_t sistema_get_per(void);
 
 /*==================[cplusplus]==============================================*/
 #ifdef __cplusplus
