@@ -147,8 +147,11 @@ TASK(InitTask)
    modbusSlave_init();
 
    /* Inicializacion de variables */
+   GetResource(VARS);
    tiltLed = 0x20;
    tiltPer = 20;
+   leds_set(tiltLed);
+   ReleaseResource(VARS);
 
    TerminateTask();
 }
@@ -165,9 +168,7 @@ TASK(LecturaTecladoTask)
    /* lee los flancos de las teclas */
    teclas = teclado_getFlancos();
 
-   /* lee el estado de las salidas */
-   //outputs = leds_get();
-
+   GetResource(VARS);
    if (TECLADO_TEC1_BIT & teclas)
    {
       if (tiltLed == 0x01)
@@ -196,9 +197,9 @@ TASK(LecturaTecladoTask)
    {
       tiltPer += 10;
 
-      if (tiltPer > 1000)
+      if (tiltPer > 2000)
       {
-         tiltPer = 1000;
+         tiltPer = 2000;
       }
    }
 
@@ -211,6 +212,7 @@ TASK(LecturaTecladoTask)
          tiltPer = 20;
       }
    }
+   ReleaseResource(VARS);
 
    TerminateTask();
 }
@@ -219,6 +221,7 @@ TASK(TaskLed)
 {
    static uint16_t count;
 
+   GetResource(VARS);
    if (count < tiltPer/10)
    {
       leds_set(tiltLed);
@@ -232,7 +235,27 @@ TASK(TaskLed)
       leds_set(0);
    }
 
+/*************/
+//   if (count == 1)
+//   {
+//      leds_toggle(tiltLed);
+//   }
+//   else if (count > tiltPer/10)
+//   {
+//      count = 0;
+//   }
+/**************/
+
+   ReleaseResource(VARS);
+
    count++;
+
+   TerminateTask();
+}
+
+TASK(ModbusSlave)
+{
+   modbusSlave_task();
 
    TerminateTask();
 }

@@ -1,4 +1,3 @@
-
 OSEK OSEK {
 
    OS	ExampleOS {
@@ -32,7 +31,7 @@ OSEK OSEK {
       RESOURCE = VARS;
    };
    
-    TASK TaskLed {
+   TASK TaskLed {
       PRIORITY = 1;
       ACTIVATION = 1;
       STACK = 512;
@@ -41,18 +40,6 @@ OSEK OSEK {
       RESOURCE = POSIXR;
       RESOURCE = VARS;
       SCHEDULE = FULL;
-   };
-   
-   ALARM ActivateTaskLed {
-      COUNTER = HardwareCounter;
-      ACTION = ACTIVATETASK {
-         TASK = TaskLed;
-      }
-      AUTOSTART = TRUE {
-         APPMODE = AppMode1;
-         ALARMTIME = 1;
-         CYCLETIME = 10;
-      };
    };
    
    TASK LecturaTecladoTask {
@@ -65,7 +52,31 @@ OSEK OSEK {
       RESOURCE = VARS;
       SCHEDULE = FULL;
    };
+   
+   TASK ModbusSlave {
+      PRIORITY = 1;
+      ACTIVATION = 1;
+      STACK = 512;
+      TYPE = EXTENDED;
+      SCHEDULE = FULL;
+      RESOURCE = POSIXR;
+      RESOURCE = MODBUSR;
+      RESOURCE = VARS;
+      EVENT = POSIXE;
+   };
 
+   ALARM ActivateTaskLed {
+      COUNTER = HardwareCounter;
+      ACTION = ACTIVATETASK {
+         TASK = TaskLed;
+      }
+      AUTOSTART = TRUE {
+         APPMODE = AppMode1;
+         ALARMTIME = 1;
+         CYCLETIME = 10;
+      };
+   };
+   
    ALARM ActivateTaskTeclado {
       COUNTER = HardwareCounter;
       ACTION = ACTIVATETASK {
@@ -77,6 +88,15 @@ OSEK OSEK {
          CYCLETIME = 5;
       };
    };
+   
+   ALARM ActivateModbusTask {
+      COUNTER = HardwareCounter;
+      ACTION = ACTIVATETASK {
+          TASK = ModbusSlave;
+      };
+      ALARMTIME = 2;
+      CYCLETIME = 5;
+   };
 
    COUNTER HardwareCounter {
       MAXALLOWEDVALUE = 1000;
@@ -84,6 +104,24 @@ OSEK OSEK {
       MINCYCLE = 1;
       TYPE = HARDWARE;
       COUNTER = HWCOUNTER0;
+   };
+   
+   ISR UART0_IRQHandler {
+      INTERRUPT = UART0;
+      CATEGORY = 2;
+      PRIORITY = 0;
+   };
+
+   ISR UART2_IRQHandler {
+      INTERRUPT = UART2;
+      CATEGORY = 2;
+      PRIORITY = 0;
+   };
+
+   ISR UART3_IRQHandler {
+      INTERRUPT = UART3;
+      CATEGORY = 2;
+      PRIORITY = 0;
    };
 
    
