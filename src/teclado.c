@@ -96,7 +96,7 @@ extern void teclado_init(void)
    fd_in = ciaaPOSIX_open("/dev/dio/in/0", O_RDWR);
 }
 
-TASK(LecturaTecladoTask)
+extern void teclado_task(void)
 {
    uint8_t inputs;
 
@@ -108,8 +108,6 @@ TASK(LecturaTecladoTask)
 
    /* guarda el nuevo estado de las teclas */
    estadoTeclas = inputs;
-
-   TerminateTask();
 }
 
 extern uint8_t teclado_getFlancos(void)
