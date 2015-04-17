@@ -26,6 +26,7 @@ OSEK OSEK {
       STACK = 512;
       TYPE = BASIC;
       SCHEDULE = NON;
+      RESOURCE = POSIXR;
    };
    
     TASK TaskA {

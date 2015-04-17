@@ -144,7 +144,99 @@ TASK(InitTask)
 
    leds_init();
 
-   modbusSlave_init();
+   //modbusSlave_init();
+   tiltLed = 0x20;
+   tiltPer = 20;
+
+   TerminateTask();
+}
+
+
+TASK(LecturaTecladoTask)
+{
+   teclado_task();
+
+   TerminateTask();
+}
+
+TASK(TaskA)
+{
+   static uint16_t count;
+   uint8_t outputs;
+   uint8_t teclas;
+
+   /* lee los flancos de las teclas */
+   teclas = teclado_getFlancos();
+
+   /* lee el estado de las salidas */
+   outputs = leds_get();
+
+   if (TECLADO_TEC1_BIT & teclas)
+   {
+      if (tiltLed == 0x01)
+      {
+         tiltLed = 0x01;
+      }
+      else
+      {
+         tiltLed >>= 1;
+      }
+//      if (tiltLed == 0x00)
+//      {
+//         tiltLed = 0x20;
+//      }
+   }
+
+   if (TECLADO_TEC2_BIT & teclas)
+   {
+      if (tiltLed == 0x20)
+      {
+         tiltLed = 0x20;
+      }
+      else
+      {
+         tiltLed <<= 1;
+      }
+//      if (tiltLed == 0x00)
+//      {
+//         tiltLed = 0x01;
+//      }
+   }
+
+   if (TECLADO_TEC3_BIT & teclas)
+   {
+      tiltPer += 10;
+
+      if (tiltPer > 1000)
+      {
+         tiltPer = 1000;
+      }
+   }
+
+   if (TECLADO_TEC4_BIT & teclas)
+   {
+      tiltPer -= 10;
+
+      if (tiltPer < 10)
+      {
+         tiltPer = 10;
+      }
+   }
+
+   if (count < tiltPer/5)
+   {
+      leds_set(tiltLed);
+   }
+   else if (count > tiltPer/5*2)
+   {
+      count =0;
+   }
+   else
+   {
+      leds_set(0);
+   }
+
+   count++;
 
    TerminateTask();
 }

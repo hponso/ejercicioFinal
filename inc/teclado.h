@@ -68,6 +68,8 @@ extern void teclado_init(void);
  */
 extern uint8_t teclado_getFlancos(void);
 
+extern void teclado_task(void);
+
 /*==================[cplusplus]==============================================*/
 #ifdef __cplusplus
 }
