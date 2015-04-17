@@ -162,11 +162,11 @@ TASK(LecturaTecladoTask)
    //uint8_t outputs;
    uint8_t teclas;
 
-   /* Lectura de teclado */
-   teclado_task();
-
    /* lee los flancos de las teclas */
    teclas = teclado_getFlancos();
+
+   /* Lectura de teclado */
+   teclado_task();
 
    GetResource(VARS);
    if (TECLADO_TEC1_BIT & teclas)

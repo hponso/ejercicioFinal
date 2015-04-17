@@ -119,6 +119,11 @@ extern uint8_t teclado_getFlancos(void)
    return ret;
 }
 
+extern void teclado_procesarTeclas(uint16_t value)
+{
+   teclasFlancoUP = value;
+}
+
 
 /** @} doxygen end group definition */
 /** @} doxygen end group definition */

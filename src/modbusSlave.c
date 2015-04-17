@@ -72,6 +72,7 @@
 #include "os.h"
 #include "ciaak.h"
 #include "leds.h"
+#include "teclado.h"
 #include "ciaaModbus.h"
 
 /*==================[macros and definitions]=================================*/
@@ -199,7 +200,7 @@ static void cmd0x10WriteMultipleReg(
          /* escritura de estado de teclas */
          case MODBUS_ADDRESS_TECLADO_REMOTO:
             temp16u = ciaaModbus_readInt(buf);
-            //procesarTeclas(temp16u);
+            teclado_procesarTeclas(temp16u);
             quantityRegProcessed = 1;
             break;
 
