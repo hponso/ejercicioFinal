@@ -78,6 +78,8 @@
 /*==================[macros and definitions]=================================*/
 
 /*==================[internal data declaration]==============================*/
+static uint8_t tiltLed;
+static int16_t tiltPer;
 
 /*==================[internal functions declaration]=========================*/
 

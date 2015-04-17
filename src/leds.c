@@ -96,27 +96,43 @@ extern void leds_init(void)
 
 extern void leds_toggle(uint8_t mask)
 {
-
+   uint8_t outputs;
+   outputs = leds_get();
+   outputs ^= mask;
+   ciaaPOSIX_write(fd_out, &outputs, 1);
+   //return 0;??
 }
 
 extern void leds_on(uint8_t mask)
 {
+   uint8_t outputs;
+   outputs = leds_get();
+   outputs |= mask;
+   ciaaPOSIX_write(fd_out, &outputs, 1);
+   //return 0;??
 
 }
 
 extern void leds_off(uint8_t mask)
 {
-
+   uint8_t outputs;
+   outputs = leds_get();
+   outputs |= mask;
+   ciaaPOSIX_write(fd_out, &outputs, 1);
+   //return 0;??
 }
 
 extern uint8_t leds_get(void)
 {
-
+   uint8_t outputs;
+   ciaaPOSIX_read(fd_out, &outputs, 1);
+   return outputs;
 }
 
 extern void leds_set(uint8_t value)
 {
-
+   ciaaPOSIX_write(fd_out, &value, 1);
+   //return 0; ??
 }
 
 /** @} doxygen end group definition */

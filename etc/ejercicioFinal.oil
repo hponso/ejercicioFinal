@@ -27,6 +27,50 @@ OSEK OSEK {
       TYPE = BASIC;
       SCHEDULE = NON;
    };
+   
+    TASK TaskA {
+      PRIORITY = 1;
+      ACTIVATION = 1;
+      STACK = 512;
+      TYPE = EXTENDED;
+      EVENT = POSIXE;
+      RESOURCE = POSIXR;
+      SCHEDULE = FULL;
+   };
+   
+   ALARM ActivateTaskA {
+      COUNTER = HardwareCounter;
+      ACTION = ACTIVATETASK {
+         TASK = TaskA;
+      }
+      AUTOSTART = TRUE {
+         APPMODE = AppMode1;
+         ALARMTIME = 1;
+         CYCLETIME = 5;
+      };
+   };
+   
+   TASK LecturaTecladoTask {
+      PRIORITY = 1;
+      ACTIVATION = 1;
+      STACK = 512;
+      TYPE = EXTENDED;
+      EVENT = POSIXE;
+      RESOURCE = POSIXR;
+      SCHEDULE = FULL;
+   };
+
+   ALARM ActivateTaskTeclado {
+      COUNTER = HardwareCounter;
+      ACTION = ACTIVATETASK {
+         TASK = LecturaTecladoTask;
+      }
+      AUTOSTART = TRUE {
+         APPMODE = AppMode1;
+         ALARMTIME = 0;
+         CYCLETIME = 5;
+      };
+   };
 
    COUNTER HardwareCounter {
       MAXALLOWEDVALUE = 1000;
