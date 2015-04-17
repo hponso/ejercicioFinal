@@ -71,6 +71,7 @@
 /*==================[inclusions]=============================================*/
 #include "os.h"
 #include "ciaak.h"
+#include "teclado.h"
 
 /*==================[macros and definitions]=================================*/
 #define TECLADO_TOTAL_TECLAS     4
@@ -110,19 +111,17 @@ extern void teclado_task(void)
    estadoTeclas = inputs;
 }
 
-extern uint8_t teclado_getFlancos(void)
+extern uint8_t teclado_get(void)
 {
-   uint8_t ret = teclasFlancoUP;
+   uint8_t ret;
+
+   ret = teclasFlancoUP;
 
    teclasFlancoUP = 0;
 
    return ret;
 }
 
-extern void teclado_procesarTeclas(uint16_t value)
-{
-   teclasFlancoUP = value;
-}
 
 
 /** @} doxygen end group definition */

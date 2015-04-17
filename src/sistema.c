@@ -71,16 +71,14 @@
 /*==================[inclusions]=============================================*/
 #include "os.h"
 #include "ciaak.h"
-#include "leds.h"
-#include "teclado.h"
 #include "sistema.h"
-#include "modbusSlave.h"
+#include "teclado.h"
 
 /*==================[macros and definitions]=================================*/
 
 /*==================[internal data declaration]==============================*/
-static uint8_t tiltLed;
-static int16_t tiltPer;
+static uint8_t periodo;
+static uint8_t ledsOn;
 
 /*==================[internal functions declaration]=========================*/
 
@@ -91,134 +89,71 @@ static int16_t tiltPer;
 /*==================[internal functions definition]==========================*/
 
 /*==================[external functions definition]==========================*/
-
-/** \brief Error Hook function
- *
- * This fucntion is called from the os if an os interface (API) returns an
- * error. Is for debugging proposes. If called this function triggers a
- * ShutdownOs which ends in a while(1).
- *
- * The values:
- *    OSErrorGetServiceId
- *    OSErrorGetParam1
- *    OSErrorGetParam2
- *    OSErrorGetParam3
- *    OSErrorGetRet
- *
- * will provide you the interface, the input parameters and the returned value.
- * For more details see the OSEK specification:
- * http://portal.osek-vdx.org/files/pdf/specs/os223.pdf
- *
- */
-void ErrorHook(void)
+extern void sistema_init(uint8_t var1, uint8_t var2)
 {
-   ciaaPOSIX_printf("ErrorHook was called\n");
-   ciaaPOSIX_printf("Service: %d, P1: %d, P2: %d, P3: %d, RET: %d\n", OSErrorGetServiceId(), OSErrorGetParam1(), OSErrorGetParam2(), OSErrorGetParam3(), OSErrorGetRet());
-   ShutdownOS(0);
+   ledsOn = var1;
+
+   periodo = var2;
 }
 
-/** \brief Main function
- *
- * This is the main entry point of the software.
- *
- * \returns 0
- *
- * \remarks This function never returns. Return value is only to avoid compiler
- *          warnings or errors.
- */
-int main(void)
+extern void sistema_set(uint8_t teclas)
 {
-   /* Starts the operating system in the Application Mode 1 */
-   /* This example has only one Application Mode */
-   StartOS(AppMode1);
-
-   /* StartOs shall never returns, but to avoid compiler warnings or errors
-    * 0 is returned */
-   return 0;
-}
-
-TASK(InitTask)
-{
-   ciaak_start();
-
-   teclado_init();
-
-   leds_init();
-
-   modbusSlave_init();
-
-   /* Inicializacion de variables */
-   GetResource(VARS);
-
-   tiltLed = 0x20;
-   tiltPer = 20;
-
-   sistema_init(tiltLed, tiltPer);
-
-   leds_set(tiltLed);
-
-   ReleaseResource(VARS);
-
-   TerminateTask();
-}
-
-
-TASK(LecturaTecladoTask)
-{
-   //uint8_t outputs;
-   uint8_t teclas;
-
-   /* Lectura de teclado */
-   teclado_task();
-
-   /* lee los flancos de las teclas */
-   teclas = teclado_get();
-
-   sistema_set(teclas);
-
-   GetResource(VARS);
-
-   tiltLed = sistema_get_led();
-
-   tiltPer = sistema_get_per();
-
-   ReleaseResource(VARS);
-
-   TerminateTask();
-}
-
-TASK(TaskLed)
-{
-   static uint16_t count;
-
-   GetResource(VARS);
-
-   if (count < tiltPer/10)
+   if (TECLADO_TEC1_BIT & teclas)
    {
-      leds_set(tiltLed);
-   }
-   else if (count > tiltPer/5)
-   {
-      count =0;
-   }
-   else
-   {
-      leds_set(0);
+      if (ledsOn == 0x01)
+      {
+         ledsOn = 0x01;
+      }
+      else
+      {
+         ledsOn >>= 1;
+      }
    }
 
-   ReleaseResource(VARS);
+   if (TECLADO_TEC2_BIT & teclas)
+   {
+      if (ledsOn == 0x20)
+      {
+         ledsOn = 0x20;
+      }
+      else
+      {
+         ledsOn <<= 1;
+      }
+   }
 
-   count++;
+   if (TECLADO_TEC3_BIT & teclas)
+   {
+      periodo += 10;
 
-   TerminateTask();
+      if (periodo > 2000)
+      {
+         periodo = 2000;
+      }
+   }
+
+   if (TECLADO_TEC4_BIT & teclas)
+   {
+      periodo -= 10;
+
+      if (periodo < 20)
+      {
+         periodo = 20;
+      }
+   }
 }
 
-TASK(ModbusSlave)
+extern uint8_t sistema_get_led(void)
 {
-   modbusSlave_task();
-
-   TerminateTask();
+   return ledsOn;
 }
+
+extern uint8_t sistema_get_per(void)
+{
+   return periodo;
+}
+
+
 
 /** @} doxygen end group definition */
 /** @} doxygen end group definition */

@@ -1,12 +1,5 @@
-
-/* IMPORTANTE: Este es un archivo para lectura de teclado utilizado
- * para hacer pruebas rápidas, dado que no resuelve de manera eficiente
- * el manejo de los rebotes.
- */
-
-
-#ifndef TECLADO_H
-#define TECLADO_H
+#ifndef SISTEMA_H
+#define SISTEMA_H
 /** \brief Short description of this file
  **
  ** Long description of this file
@@ -38,10 +31,6 @@ extern "C" {
 #endif
 
 /*==================[macros]=================================================*/
-#define TECLADO_TEC1_BIT         0B0001
-#define TECLADO_TEC2_BIT         0B0010
-#define TECLADO_TEC3_BIT         0B0100
-#define TECLADO_TEC4_BIT         0B1000
 
 /*==================[typedef]================================================*/
 
@@ -49,26 +38,13 @@ extern "C" {
 
 /*==================[external functions declaration]=========================*/
 
-/** \brief inicializa el teclaso
- *
- * Inicializa el teclado
- *
- * \returns
- *
- */
-extern void teclado_init(void);
+extern void sistema_init(uint8_t,uint8_t);
 
-/** \brief Teclado Get Flancos
- *
- * Indica si alguna tecla se presionó.
- *
- * \returns bits que indican en qué tecla se produjo un flanco
- *
- * \remarks Cuando se ejecuta esta función se ponen a cero todos los flancos
- */
-extern uint8_t teclado_get(void);
+extern void sistema_set(uint8_t);
 
-extern void teclado_task(void);
+extern uint8_t sistema_get_led(void);
+
+extern uint8_t sistema_get_per(void);
 
 /*==================[cplusplus]==============================================*/
 #ifdef __cplusplus
